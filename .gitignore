@@ -1,0 +1,7 @@
+HangmanConsole.cbp
+HangmanConsole.depend
+HangmanConsole.layout
+bin/
+obj/
+words_to_hangman.txt
+
