@@ -226,23 +226,27 @@ int main()
     string word_letters_ideal[picked_word.length()];
     for(int i=0; i<picked_word.length(); i++)
     {
-        word_letters_ideal[i] = picked_word[i];
+        word_letters_ideal[i] = picked_word[i]; //string[n]
         //cout<<word_letters_ideal[i]<<" ";
     }
 
-    vector <char> wrong_letters; //head, body,left leg, right leg, left arm, right arm
+    vector <char> wrong_letters;
 
 
     char your_pick;
     while(count_mistakes!=6)
     {
+        //print wrong letters - elemenets in vector 'wrong_letters'
+        for (size_t i = 0; i < wrong_letters.size(); ++i)
+        {
+            cout<<"\x1B[31m"<<wrong_letters.at(i)<<"\033[0m    ";
+        }
+        cout<<endl;
+
         //print hangman
         hangman(count_mistakes);
 
-        //print vectors
-
-
-        cout<<endl<<"Your lives: "<<6-count_mistakes<<endl;
+        cout<<"Your lives: "<<6-count_mistakes<<endl;
 
 
         for(int i=0; i<picked_word.length(); i++)
