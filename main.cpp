@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <vector>  //"dynamic" arrays  {}
+#include <iomanip>
 using namespace std;
 
 string picked_word;
@@ -18,6 +19,127 @@ void pick_word()
     cout<<picked_word<<endl;
     //cout<<picked_word.length();
 }
+
+bool check_win(string *array1, string *array2ideal)
+{
+    int how_many = picked_word.length();
+    int count1 = 0;
+    for(int n = 0; n < picked_word.length(); n++)
+    {
+        if(array1[n] == array2ideal[n])
+        {
+            count1++;
+        }
+    }
+
+    if(count1 == how_many)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void hangman(int m) //m - number of mistakes
+{
+    switch(m)
+    {
+        //head, body,left leg, right leg, left arm, right arm
+        case 1:
+        {
+            cout<<" #########"<<endl;
+            cout<<" #       #"<<endl;
+            cout<<" #     #####"<<endl;
+            cout<<" #     #   #"<<endl;
+            cout<<" #     #####"<<endl;
+            cout<<" #"<<endl;
+            cout<<" #"<<endl;
+            cout<<" #"<<endl;
+            cout<<" #"<<endl;
+            cout<<" #"<<endl;
+            cout<<"#  #"<<endl;
+            break;
+        }
+        case 2:
+        {
+            cout<<" #########"<<endl;
+            cout<<" #       #"<<endl;
+            cout<<" #     #####"<<endl;
+            cout<<" #     #   #"<<endl;
+            cout<<" #     #####"<<endl;
+            cout<<" #       #"<<endl;
+            cout<<" #       #"<<endl;
+            cout<<" #       #"<<endl;
+            cout<<" #"<<endl;
+            cout<<" #"<<endl;
+            cout<<"#  #"<<endl;
+            break;
+        }
+        case 3:
+        {
+            cout<<" #########"<<endl;
+            cout<<" #       #"<<endl;
+            cout<<" #     #####"<<endl;
+            cout<<" #     #   #"<<endl;
+            cout<<" #     #####"<<endl;
+            cout<<" #       #"<<endl;
+            cout<<" #       #"<<endl;
+            cout<<" #       #"<<endl;
+            cout<<" #      #"<<endl;
+            cout<<" #     #"<<endl;
+            cout<<"#  #"<<endl;
+            break;
+        }
+        case 4:
+        {
+            cout<<" #########"<<endl;
+            cout<<" #       #"<<endl;
+            cout<<" #     #####"<<endl;
+            cout<<" #     #   #"<<endl;
+            cout<<" #     #####"<<endl;
+            cout<<" #       #"<<endl;
+            cout<<" #       #"<<endl;
+            cout<<" #       #"<<endl;
+            cout<<" #      # #"<<endl;
+            cout<<" #     #   #"<<endl;
+            cout<<"#  #"<<endl;
+            break;
+        }
+        case 5:
+        {
+            cout<<" #########"<<endl;
+            cout<<" #       #"<<endl;
+            cout<<" #     #####"<<endl;
+            cout<<" #     #   #"<<endl;
+            cout<<" #     #####"<<endl;
+            cout<<" #       #"<<endl;
+            cout<<" #    ####"<<endl;
+            cout<<" #    #  #"<<endl;
+            cout<<" #      # #"<<endl;
+            cout<<" #     #   #"<<endl;
+            cout<<"#  #"<<endl;
+            break;
+        }
+        case 6:
+        {
+            cout<<" #########"<<endl;
+            cout<<" #       #"<<endl;
+            cout<<" #     #####"<<endl;
+            cout<<" #     X   X"<<endl;
+            cout<<" #     #####"<<endl;
+            cout<<" #       #"<<endl;
+            cout<<" #    #######"<<endl;
+            cout<<" #    #  #  #"<<endl;
+            cout<<" #      # #"<<endl;
+            cout<<" #     #   #"<<endl;
+            cout<<"#  #"<<endl;
+            break;
+        }
+    }
+}
+
 
 
 int main()
@@ -114,8 +236,13 @@ int main()
     char your_pick;
     while(count_mistakes!=6)
     {
+        //print hangman
+        hangman(count_mistakes);
+
         //print vectors
-        cout<<"Your lives: "<<6-count_mistakes<<endl;
+
+
+        cout<<endl<<"Your lives: "<<6-count_mistakes<<endl;
 
 
         for(int i=0; i<picked_word.length(); i++)
@@ -142,8 +269,30 @@ int main()
             wrong_letters.push_back(your_pick);
             count_mistakes++;
         }
+
+        //win check
+
+        if(check_win(word_letters, word_letters_ideal))
+        {
+            system("clear");
+
+            for(int i=0; i<picked_word.length(); i++)
+            {
+                cout<<word_letters[i]<<" ";
+            }
+            cout<<endl<<"You won!";
+            cout<<endl<<"The word was "<<picked_word;
+            cout<<endl<<"You lost "<<count_mistakes<<" lives!"<<endl;
+            hangman(count_mistakes);
+            exit(0);
+        }
+
         system("clear");
     }
+
+    //lose
+    hangman(count_mistakes);
+    cout<<endl<<"You lost!"<<endl<<"The word was "<<picked_word;
 
     return 0;
 }
