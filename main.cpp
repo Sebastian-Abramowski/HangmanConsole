@@ -4,6 +4,8 @@
 #include <ctime>
 #include <vector>  //"dynamic" arrays  {}
 #include <iomanip>
+#include <unistd.h> //sleep()
+#include <stdlib.h>
 using namespace std;
 
 string picked_word;
@@ -140,6 +142,43 @@ void hangman(int m) //m - number of mistakes
     }
 }
 
+void youre_dead()
+{
+    sleep(1.5);
+    system("clear");
+    cout<<" #########"<<endl;
+    cout<<" #       #"<<endl;
+    cout<<" #       #"<<endl;
+    cout<<" #     #####"<<endl;
+    cout<<" #     X   X"<<endl;
+    cout<<" #     #####"<<endl;
+    cout<<" #       #"<<endl;
+    cout<<" #     ##### "<<endl;
+    cout<<" #    #  #  #"<<endl;
+    cout<<" #    #  #  #"<<endl;
+    cout<<"# #     # #"<<endl;
+
+    cout<<endl<<"\x1B[33mYou lost!\033[0m";
+    cout<<endl<<"The word was: "<<picked_word;
+}
+
+void starting_page()
+{
+    system("clear");
+    cout<<"\x1B[37mWelcome to Hangman!\033[0m"<<endl;
+    cout<<" #########"<<endl;
+    cout<<" #       #"<<endl;
+    cout<<" #     #####"<<endl;
+    cout<<" #     #   #"<<endl;
+    cout<<" #     #####"<<endl;
+    cout<<" #       #"<<endl;
+    cout<<" #    #######"<<endl;
+    cout<<" #    #  #  #"<<endl;
+    cout<<" #      # #"<<endl;
+    cout<<" #     #   #"<<endl;
+    cout<<"#  #"<<endl;
+    cout<<"Press ENTER to continue...";
+}
 
 
 int main()
@@ -233,6 +272,10 @@ int main()
     vector <char> wrong_letters;
     char your_pick;
 
+    starting_page();
+    getchar();
+    system("clear");
+
     while(count_mistakes!=6)
     {
         //print wrong letters - elemenets in vector 'wrong_letters'
@@ -245,8 +288,12 @@ int main()
         //print hangman
         hangman(count_mistakes);
 
-        cout<<"Your lives: "<<6-count_mistakes<<endl;
-
+        cout<<"Your lives: ";
+        for(int i=0; i<(6-count_mistakes); i++)
+        {
+            cout<<"\x1B[33m♥\033[0m\  ";
+        }
+        cout<<endl;
 
         for(int i=0; i<picked_word.length(); i++)
         {
@@ -278,12 +325,13 @@ int main()
         if(check_win(word_letters, word_letters_ideal))
         {
             system("clear");
-
+            /*
             for(int i=0; i<picked_word.length(); i++)
             {
                 cout<<word_letters[i]<<" ";
             }
-            cout<<endl<<"You won!";
+            */
+            cout<<endl<<"\x1B[32mYou won!\033[0m";
             cout<<endl<<"The word was "<<picked_word;
             cout<<endl<<"You lost "<<count_mistakes<<" lives!"<<endl;
             hangman(count_mistakes);
@@ -295,7 +343,7 @@ int main()
 
     //lose
     hangman(count_mistakes);
-    cout<<endl<<"You lost!"<<endl<<"The word was "<<picked_word;
+    youre_dead();
 
     return 0;
 }
@@ -304,10 +352,8 @@ int main()
 // TODO (sebastian#1#): Mozna wpisywac te same litery - napraw to ...
 // TODO (sebastian#1#): Muzyka ...
 // TODO (sebastian#1#): mierzenie czasu - na linuxie metoda z clock() dziala inaczej niz na widnowsie - nie korzystaj z niej ...
-// TODO (sebastian#1#): Animacja giniecia ...
-// TODO (sebastian#1#): Strona startowa
-// TODO (sebastian#1#): serduszka zamiast liczby zyc ...
 // TODO (sebastian#1#): mozliwosc powtorzenia gry ...
+
 
 
 
