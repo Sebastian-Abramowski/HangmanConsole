@@ -180,6 +180,21 @@ void starting_page()
     cout<<"Press ENTER to continue...";
 }
 
+//taking only one letter chars as inputs, before you could pass the program "eoeofkd" and it would have taken 'd'
+void enter_your_pick(string &s, char &c)
+{
+    cout<<endl<<"Enter the character you want to check: ";
+    cin>>s;
+
+    if(s.length() != 1)
+    {
+        cout<<endl<<"Invalid input, try again!";
+        enter_your_pick(s, c);
+    }
+
+    c = s[0];
+}
+
 
 int main()
 {
@@ -271,6 +286,7 @@ int main()
 
     vector <char> wrong_letters;
     char your_pick;
+    string helping_hand;
 
     starting_page();
     getchar();
@@ -299,8 +315,8 @@ int main()
         {
             cout<<word_letters[i]<<" ";
         }
-        cout<<endl<<"Enter the character you want to check: ";
-        cin>>your_pick;
+
+        enter_your_pick(helping_hand, your_pick);
 
         //check if this is one of the word's letters
         bool good = false;
@@ -348,7 +364,7 @@ int main()
     return 0;
 }
 
-// TODO (sebastian#1#): Jedna litera na raz - zabezpieczenie ..., mozna wpisywac cyfry
+// TODO (sebastian#1#): ..., mozna wpisywac cyfry i inne dziwne znaki
 // TODO (sebastian#1#): Mozna wpisywac te same litery - napraw to ...
 // TODO (sebastian#1#): Muzyka ...
 // TODO (sebastian#1#): mierzenie czasu - na linuxie metoda z clock() dziala inaczej niz na widnowsie - nie korzystaj z niej ...
