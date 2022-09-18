@@ -16,7 +16,7 @@ void pick_word()
     srand(time(NULL));
     int random_numeber = rand() % 100; //from 0 to 99
     picked_word = words[random_numeber];
-    cout<<picked_word<<endl;
+    cout<<picked_word;
     //cout<<picked_word.length();
 }
 
@@ -127,7 +127,7 @@ void hangman(int m) //m - number of mistakes
             cout<<" #########"<<endl;
             cout<<" #       #"<<endl;
             cout<<" #     #####"<<endl;
-            cout<<" #     X   X"<<endl;
+            cout<<" #     #   #"<<endl;
             cout<<" #     #####"<<endl;
             cout<<" #       #"<<endl;
             cout<<" #    #######"<<endl;
@@ -231,9 +231,8 @@ int main()
     }
 
     vector <char> wrong_letters;
-
-
     char your_pick;
+
     while(count_mistakes!=6)
     {
         //print wrong letters - elemenets in vector 'wrong_letters'
@@ -300,3 +299,16 @@ int main()
 
     return 0;
 }
+
+// TODO (sebastian#1#): Jedna litera na raz - zabezpieczenie ..., mozna wpisywac cyfry
+// TODO (sebastian#1#): Mozna wpisywac te same litery - napraw to ...
+// TODO (sebastian#1#): Muzyka ...
+// TODO (sebastian#1#): mierzenie czasu - na linuxie metoda z clock() dziala inaczej niz na widnowsie - nie korzystaj z niej ...
+// TODO (sebastian#1#): Animacja giniecia ...
+// TODO (sebastian#1#): Strona startowa
+// TODO (sebastian#1#): serduszka zamiast liczby zyc ...
+// TODO (sebastian#1#): mozliwosc powtorzenia gry ...
+
+
+
+
