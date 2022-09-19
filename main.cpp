@@ -192,7 +192,26 @@ void enter_your_pick(string &s, char &c)
         enter_your_pick(s, c);
     }
 
-    c = s[0];
+    //at this point s.length() must be equal to 1
+    c = s[0]; //char
+
+    //check if it is a letter
+    //ASCII - 65-90 capital, small 97-122
+    int ascii_nb = int(c);
+
+    if(ascii_nb>=97&&ascii_nb<=122)
+    {
+        c = char(ascii_nb);
+    }
+    else if(ascii_nb>=65&&ascii_nb<=90)
+    {
+        c = char(ascii_nb + 32);
+    }
+    else
+    {
+        cout<<endl<<"Invalid input, try again!";
+        enter_your_pick(s, c);
+    }
 }
 
 
@@ -364,11 +383,12 @@ int main()
     return 0;
 }
 
-// TODO (sebastian#1#): ..., mozna wpisywac cyfry i inne dziwne znaki
 // TODO (sebastian#1#): Mozna wpisywac te same litery - napraw to ...
 // TODO (sebastian#1#): Muzyka ...
 // TODO (sebastian#1#): mierzenie czasu - na linuxie metoda z clock() dziala inaczej niz na widnowsie - nie korzystaj z niej ...
 // TODO (sebastian#1#): mozliwosc powtorzenia gry ...
+
+
 
 
 
