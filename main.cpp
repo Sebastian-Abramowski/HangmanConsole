@@ -6,11 +6,13 @@
 #include <iomanip>
 #include <unistd.h> //sleep()
 #include <stdlib.h>
+#include <chrono>
 using namespace std;
 
 string picked_word;
 string words[100];
 int count_mistakes=0;
+chrono::time_point<chrono::system_clock> start, finish; //M1
 
 void pick_word()
 {
@@ -311,6 +313,7 @@ int main()
     getchar();
     system("clear");
 
+    start = chrono::system_clock::now(); //M2
     while(count_mistakes!=6)
     {
         //print wrong letters - elemenets in vector 'wrong_letters'
@@ -370,6 +373,9 @@ int main()
             cout<<endl<<"The word was "<<picked_word;
             cout<<endl<<"You lost "<<count_mistakes<<" lives!"<<endl;
             hangman(count_mistakes);
+            finish = chrono::system_clock::now(); //
+            chrono::duration<double> elapsed_seconds = finish - start; //M4
+            cout<<endl<<"This round lasted: " << elapsed_seconds.count() << "s\n"; //M5
             exit(0);
         }
 
@@ -378,14 +384,17 @@ int main()
 
     //lose
     hangman(count_mistakes);
+    finish = chrono::system_clock::now(); //M4
     youre_dead();
+    chrono::duration<double> elapsed_seconds = finish - start; //M4
+    cout<<endl<<endl<<"This round lasted: " << elapsed_seconds.count() << "s\n"; //M5
+
 
     return 0;
 }
 
 // TODO (sebastian#1#): Mozna wpisywac te same litery - napraw to ...
 // TODO (sebastian#1#): Muzyka ...
-// TODO (sebastian#1#): mierzenie czasu - na linuxie metoda z clock() dziala inaczej niz na widnowsie - nie korzystaj z niej ...
 // TODO (sebastian#1#): mozliwosc powtorzenia gry ...
 
 
