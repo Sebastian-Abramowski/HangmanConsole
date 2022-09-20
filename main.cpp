@@ -2,11 +2,12 @@
 #include <fstream>
 #include <cstdlib>
 #include <ctime>
-#include <vector>  //"dynamic" arrays  {}
+#include <vector>  //'dynamic' arrays  {}
 #include <iomanip>
 #include <unistd.h> //sleep()
 #include <stdlib.h>
-#include <chrono>
+#include <chrono> //measure time M1-M5
+#include <algorithm> //count()
 using namespace std;
 
 string picked_word;
@@ -63,7 +64,7 @@ void hangman(int m) //m - number of mistakes
             cout<<" #"<<endl;
             cout<<" #"<<endl;
             cout<<" #"<<endl;
-            cout<<"#  #"<<endl;
+            cout<<"# #"<<endl;
             break;
         }
         case 2:
@@ -78,7 +79,7 @@ void hangman(int m) //m - number of mistakes
             cout<<" #       #"<<endl;
             cout<<" #"<<endl;
             cout<<" #"<<endl;
-            cout<<"#  #"<<endl;
+            cout<<"# #"<<endl;
             break;
         }
         case 3:
@@ -93,7 +94,7 @@ void hangman(int m) //m - number of mistakes
             cout<<" #       #"<<endl;
             cout<<" #      #"<<endl;
             cout<<" #     #"<<endl;
-            cout<<"#  #"<<endl;
+            cout<<"# #"<<endl;
             break;
         }
         case 4:
@@ -108,7 +109,7 @@ void hangman(int m) //m - number of mistakes
             cout<<" #       #"<<endl;
             cout<<" #      # #"<<endl;
             cout<<" #     #   #"<<endl;
-            cout<<"#  #"<<endl;
+            cout<<"# #"<<endl;
             break;
         }
         case 5:
@@ -123,7 +124,7 @@ void hangman(int m) //m - number of mistakes
             cout<<" #    #  #"<<endl;
             cout<<" #      # #"<<endl;
             cout<<" #     #   #"<<endl;
-            cout<<"#  #"<<endl;
+            cout<<"# #"<<endl;
             break;
         }
         case 6:
@@ -138,7 +139,7 @@ void hangman(int m) //m - number of mistakes
             cout<<" #    #  #  #"<<endl;
             cout<<" #      # #"<<endl;
             cout<<" #     #   #"<<endl;
-            cout<<"#  #"<<endl;
+            cout<<"# #"<<endl;
             break;
         }
     }
@@ -167,23 +168,37 @@ void youre_dead()
 void starting_page()
 {
     system("clear");
-    cout<<"\x1B[37mWelcome to Hangman!\033[0m"<<endl;
-    cout<<" #########"<<endl;
-    cout<<" #       #"<<endl;
-    cout<<" #     #####"<<endl;
-    cout<<" #     #   #"<<endl;
-    cout<<" #     #####"<<endl;
-    cout<<" #       #"<<endl;
-    cout<<" #    #######"<<endl;
-    cout<<" #    #  #  #"<<endl;
-    cout<<" #      # #"<<endl;
-    cout<<" #     #   #"<<endl;
-    cout<<"#  #"<<endl;
-    cout<<"Press ENTER to continue...";
+    cout<<setw(40)<<"\x1B[37mWelcome to Hangman!\033[0m"<<endl<<endl;
+    cout<<"                     #########"<<endl;
+    cout<<"                     #       #"<<endl;
+    cout<<"                     #     #####"<<endl;
+    cout<<"                     #     #   #"<<endl;
+    cout<<"                     #     #####"<<endl;
+    cout<<"                     #       #"<<endl;
+    cout<<"                     #    #######"<<endl;
+    cout<<"                     #    #  #  #"<<endl;
+    cout<<"                     #      # #"<<endl;
+    cout<<"                     #     #   #"<<endl;
+    cout<<"                    # #"<<endl<<endl;
+    cout<<setw(40)<<"Press ENTER to continue...";
+}
+
+//you could have used a normal char instead of an ascii number , it works though
+bool show_letter(vector <char> vec, int num_ascii) //we dont have to work on original vector, its fine
+{
+    int hm = count(vec.begin(), vec.end(), char(num_ascii)); //it will be terminated before adding to the vector char(num_ascii), so if there is such a char in the vector, a user will be asked to give us input once again
+    if(hm==1)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 //taking only one letter chars as inputs, before you could pass the program "eoeofkd" and it would have taken 'd'
-void enter_your_pick(string &s, char &c)
+void enter_your_pick(string &s, char &c, vector <char> ve)
 {
     cout<<endl<<"Enter the character you want to check: ";
     cin>>s;
@@ -191,15 +206,22 @@ void enter_your_pick(string &s, char &c)
     if(s.length() != 1)
     {
         cout<<endl<<"Invalid input, try again!";
-        enter_your_pick(s, c);
+        enter_your_pick(s, c, ve);
     }
 
     //at this point s.length() must be equal to 1
     c = s[0]; //char
-
-    //check if it is a letter
     //ASCII - 65-90 capital, small 97-122
     int ascii_nb = int(c);
+
+    if(show_letter(ve, ascii_nb) == false)
+    {
+        cout<<endl<<"This letter has been already checked, try again!";
+        enter_your_pick(s, c, ve);
+    }
+
+
+    //check if it is a letter
 
     if(ascii_nb>=97&&ascii_nb<=122)
     {
@@ -212,7 +234,7 @@ void enter_your_pick(string &s, char &c)
     else
     {
         cout<<endl<<"Invalid input, try again!";
-        enter_your_pick(s, c);
+        enter_your_pick(s, c, ve);
     }
 }
 
@@ -338,7 +360,7 @@ int main()
             cout<<word_letters[i]<<" ";
         }
 
-        enter_your_pick(helping_hand, your_pick);
+        enter_your_pick(helping_hand, your_pick, wrong_letters);
 
         //check if this is one of the word's letters
         bool good = false;
@@ -393,9 +415,11 @@ int main()
     return 0;
 }
 
-// TODO (sebastian#1#): Mozna wpisywac te same litery - napraw to ...
 // TODO (sebastian#1#): Muzyka ...
 // TODO (sebastian#1#): mozliwosc powtorzenia gry ...
+
+
+
 
 
 
