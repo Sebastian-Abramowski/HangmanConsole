@@ -198,7 +198,7 @@ bool show_letter(vector <char> vec, char pick) //we dont have to work on origina
 }
 
 //taking only one letter chars as inputs, before you could pass the program "eoeofkd" and it would have taken 'd'
-void enter_your_pick(string &s, char &c, vector <char> ve)
+char enter_your_pick(string &s, char &c, vector <char> ve)
 {
     cout<<endl<<"Enter the character you want to check: ";
     cin>>s;
@@ -225,10 +225,12 @@ void enter_your_pick(string &s, char &c, vector <char> ve)
     if(ascii_nb>=97&&ascii_nb<=122)
     {
         c = char(ascii_nb);
+        return c;
     }
     else if(ascii_nb>=65&&ascii_nb<=90)
     {
         c = char(ascii_nb + 32);
+        return c;
     }
     else
     {
@@ -373,7 +375,7 @@ int main()
                 cout<<word_letters[i]<<" ";
             }
 
-            enter_your_pick(helping_hand, your_pick, wrong_letters);
+            your_pick = enter_your_pick(helping_hand, your_pick, wrong_letters);
             cout<<endl<<your_pick<<endl; sleep(2);
 
             //check if this is one of the word's letters
@@ -441,10 +443,9 @@ int main()
 }
 
 // TODO (sebastian#1#): Muzyka ...
-//napraw inputa
 
+//NOTES
 // system("clear") wasnt working properly -> cout << "\033[2J\033[1;1H";
-
 //-------------------------------------------
 // declaring variables again -> what happens?
 //inside a loop a variable is constanly being created and destoroyed, The variable is allocated once,
@@ -454,8 +455,8 @@ int main()
 //just re-using some free slot (from other variable whose scope has ended).
 //https://stackoverflow.com/questions/7959573/declaring-variables-inside-loops-good-practice-or-bad-practice
 //-------------------------------------------
-
-
+//you have spent too much time on void enter_your_pick(x,y,z), this function could set two different values to the
+//original y, which caused input problems, it just should have returned some kind of value at first...
 
 
 
