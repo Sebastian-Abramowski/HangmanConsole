@@ -14,11 +14,11 @@ string picked_word;
 string words[100];
 int count_mistakes=0;
 chrono::time_point<chrono::system_clock> start, finish; //M1
+int number_of_loop = 0;
 
 void pick_word()
 {
     //pick a random word
-    srand(time(NULL));
     int random_numeber = rand() % 100; //from 0 to 99
     picked_word = words[random_numeber];
     cout<<picked_word;
@@ -148,7 +148,7 @@ void hangman(int m) //m - number of mistakes
 void youre_dead()
 {
     sleep(1.5);
-    system("clear");
+    cout << "\033[2J\033[1;1H";
     cout<<" #########"<<endl;
     cout<<" #       #"<<endl;
     cout<<" #       #"<<endl;
@@ -167,8 +167,8 @@ void youre_dead()
 
 void starting_page()
 {
-    system("clear");
-    cout<<setw(40)<<"\x1B[37mWelcome to Hangman!\033[0m"<<endl<<endl;
+    cout << "\033[2J\033[1;1H";
+    cout<<setw(45)<<"\x1B[37mWelcome to Hangman!\033[0m"<<endl<<endl;
     cout<<"                     #########"<<endl;
     cout<<"                     #       #"<<endl;
     cout<<"                     #     #####"<<endl;
@@ -241,6 +241,8 @@ void enter_your_pick(string &s, char &c, vector <char> ve)
 
 int main()
 {
+    srand(time(NULL));
+
     //working on the file
     fstream plik;
     plik.open("words_to_hangman.txt", ios::in);
@@ -309,114 +311,142 @@ int main()
 
     plik.close();
 
-    pick_word();
-
-    //show a number of letters and an array for letters
-    string word_letters[picked_word.length()];
-    for(int i=0; i<picked_word.length(); i++)
+    char looping = 'y';
+    do
     {
-        word_letters[i] = '_';
-        //cout<<word_letters[i]<<" ";
-    }
+        number_of_loop++;
+        count_mistakes = 0;
+        pick_word();
 
-    //how the finished array should look
-    string word_letters_ideal[picked_word.length()];
-    for(int i=0; i<picked_word.length(); i++)
-    {
-        word_letters_ideal[i] = picked_word[i]; //string[n]
-        //cout<<word_letters_ideal[i]<<" ";
-    }
-
-    vector <char> wrong_letters;
-    char your_pick;
-    string helping_hand;
-
-    starting_page();
-    getchar();
-    system("clear");
-
-    start = chrono::system_clock::now(); //M2
-    while(count_mistakes!=6)
-    {
-        //print wrong letters - elemenets in vector 'wrong_letters'
-        for (size_t i = 0; i < wrong_letters.size(); ++i)
-        {
-            cout<<"\x1B[31m"<<wrong_letters.at(i)<<"\033[0m    ";
-        }
-        cout<<endl;
-
-        //print hangman
-        hangman(count_mistakes);
-
-        cout<<"Your lives: ";
-        for(int i=0; i<(6-count_mistakes); i++)
-        {
-            cout<<"\x1B[33m♥\033[0m\  ";
-        }
-        cout<<endl;
-
+        //show a number of letters and an array for letters
+        string word_letters[picked_word.length()];
         for(int i=0; i<picked_word.length(); i++)
         {
-            cout<<word_letters[i]<<" ";
+            word_letters[i] = '_';
+            //cout<<word_letters[i]<<" ";
         }
 
-        enter_your_pick(helping_hand, your_pick, wrong_letters);
-
-        //check if this is one of the word's letters
-        bool good = false;
+        //how the finished array should look
+        string word_letters_ideal[picked_word.length()];
         for(int i=0; i<picked_word.length(); i++)
         {
-            if(picked_word[i] == your_pick)
+            word_letters_ideal[i] = picked_word[i]; //string[n]
+            //cout<<word_letters_ideal[i]<<" ";
+        }
+
+        vector <char> wrong_letters;
+        char your_pick;
+        string helping_hand;
+
+        starting_page();
+        getchar();
+        /*
+        if(number_of_loop>1)
+        {
+            getchar();
+        }
+        */
+        cout << "\033[2J\033[1;1H";
+
+        start = chrono::system_clock::now(); //M2
+        while(count_mistakes!=6)
+        {
+            cout<<endl<<picked_word;
+            //print wrong letters - elemenets in vector 'wrong_letters'
+            for (size_t i = 0; i < wrong_letters.size(); ++i)
             {
-                word_letters[i] = word_letters_ideal[i];
-                good = true;
-                //cout<<endl<<"eooo"<<endl;
+                cout<<"\x1B[31m"<<wrong_letters.at(i)<<"\033[0m    ";
             }
-        }
+            cout<<endl;
 
-        if(good == false)
-        {
-            wrong_letters.push_back(your_pick);
-            count_mistakes++;
-        }
+            //print hangman
+            hangman(count_mistakes);
 
-        //win check
+            cout<<"Your lives: ";
+            for(int i=0; i<(6-count_mistakes); i++)
+            {
+                cout<<"\x1B[33m♥\033[0m\  ";
+            }
+            cout<<endl;
 
-        if(check_win(word_letters, word_letters_ideal))
-        {
-            system("clear");
-            /*
             for(int i=0; i<picked_word.length(); i++)
             {
                 cout<<word_letters[i]<<" ";
             }
-            */
-            cout<<endl<<"\x1B[32mYou won!\033[0m";
-            cout<<endl<<"The word was "<<picked_word;
-            cout<<endl<<"You lost "<<count_mistakes<<" lives!"<<endl;
-            hangman(count_mistakes);
-            finish = chrono::system_clock::now(); //
-            chrono::duration<double> elapsed_seconds = finish - start; //M4
-            cout<<endl<<"This round lasted: " << elapsed_seconds.count() << "s\n"; //M5
-            exit(0);
+
+            enter_your_pick(helping_hand, your_pick, wrong_letters);
+
+            //check if this is one of the word's letters
+            bool good = false;
+            for(int i=0; i<picked_word.length(); i++)
+            {
+                if(picked_word[i] == your_pick)
+                {
+                    word_letters[i] = word_letters_ideal[i];
+                    good = true;
+                    //cout<<endl<<"eooo"<<endl;
+                }
+            }
+
+            if(good == false)
+            {
+                wrong_letters.push_back(your_pick);
+                count_mistakes++;
+            }
+
+            //win check
+
+            if(check_win(word_letters, word_letters_ideal))
+            {
+                cout << "\033[2J\033[1;1H";
+                /*
+                for(int i=0; i<picked_word.length(); i++)
+                {
+                    cout<<word_letters[i]<<" ";
+                }
+                */
+                cout<<endl<<"\x1B[32mYou won!\033[0m";
+                cout<<endl<<"The word was "<<picked_word;
+                cout<<endl<<"You lost "<<count_mistakes<<" lives!"<<endl;
+                hangman(count_mistakes);
+                finish = chrono::system_clock::now(); //
+                chrono::duration<double> elapsed_seconds = finish - start; //M4
+                cout<<endl<<"This round lasted: " << elapsed_seconds.count() << "s\n"; //M5
+
+                cout<<"Do you want to play again? 'y' or 'n' : ";
+                cin>> looping;
+                break;
+            }
+
+            cout << "\033[2J\033[1;1H";
         }
 
-        system("clear");
-    }
+        //lose
+        if(count_mistakes == 6)
+        {
+        hangman(count_mistakes);
+        finish = chrono::system_clock::now(); //M4
+        youre_dead();
+        chrono::duration<double> elapsed_seconds = finish - start; //M4
+        cout<<endl<<endl<<"This round lasted: " << elapsed_seconds.count() << "s\n"; //M5
 
-    //lose
-    hangman(count_mistakes);
-    finish = chrono::system_clock::now(); //M4
-    youre_dead();
-    chrono::duration<double> elapsed_seconds = finish - start; //M4
-    cout<<endl<<endl<<"This round lasted: " << elapsed_seconds.count() << "s\n"; //M5
+        cout<<"Do you want to play again? 'y' or 'n' :";
+        cin>>looping;
+        }
+    }
+    while(looping == 'y');
 
 
     return 0;
 }
 
 // TODO (sebastian#1#): Muzyka ...
-// TODO (sebastian#1#): mozliwosc powtorzenia gry ...
+
+// system("clear") wasnt working properly -> cout << "\033[2J\033[1;1H";
+// declaring again
+
+// napraw inputa
+
 
 
 
