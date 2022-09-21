@@ -184,10 +184,10 @@ void starting_page()
 }
 
 //you could have used a normal char instead of an ascii number , it works though
-bool show_letter(vector <char> vec, int num_ascii) //we dont have to work on original vector, its fine
+bool show_letter(vector <char> vec, char pick) //we dont have to work on original vector, its fine
 {
-    int hm = count(vec.begin(), vec.end(), char(num_ascii)); //it will be terminated before adding to the vector char(num_ascii), so if there is such a char in the vector, a user will be asked to give us input once again
-    if(hm==1)
+    int hm = count(vec.begin(), vec.end(), pick); //it will be terminated before adding to the vector char(num_ascii), so if there is such a char in the vector, a user will be asked to give us input once again
+    if(hm == 1)
     {
         return false;
     }
@@ -211,18 +211,17 @@ void enter_your_pick(string &s, char &c, vector <char> ve)
 
     //at this point s.length() must be equal to 1
     c = s[0]; //char
-    //ASCII - 65-90 capital, small 97-122
-    int ascii_nb = int(c);
 
-    if(show_letter(ve, ascii_nb) == false)
+    if(show_letter(ve, c) == false)
     {
-        cout<<endl<<"This letter has been already checked, try again!";
+        cout<<endl<<"This letter has been already checked!";
         enter_your_pick(s, c, ve);
     }
 
+    //ASCII - 65-90 capital, small 97-122
+    int ascii_nb = int(c);
 
     //check if it is a letter
-
     if(ascii_nb>=97&&ascii_nb<=122)
     {
         c = char(ascii_nb);
@@ -375,6 +374,7 @@ int main()
             }
 
             enter_your_pick(helping_hand, your_pick, wrong_letters);
+            cout<<endl<<your_pick<<endl; sleep(2);
 
             //check if this is one of the word's letters
             bool good = false;
@@ -441,11 +441,21 @@ int main()
 }
 
 // TODO (sebastian#1#): Muzyka ...
+//napraw inputa
 
 // system("clear") wasnt working properly -> cout << "\033[2J\033[1;1H";
-// declaring again
 
-// napraw inputa
+//-------------------------------------------
+// declaring variables again -> what happens?
+//inside a loop a variable is constanly being created and destoroyed, The variable is allocated once,
+//when the function is called. In fact, from an allocation perspective, it is (nearly) the same as
+//declaring the variable at the beginning of the function. The only difference is the scope:
+//the variable cannot be used outside of the loop. It may even be possible that the variable is not allocated,
+//just re-using some free slot (from other variable whose scope has ended).
+//https://stackoverflow.com/questions/7959573/declaring-variables-inside-loops-good-practice-or-bad-practice
+//-------------------------------------------
+
+
 
 
 
