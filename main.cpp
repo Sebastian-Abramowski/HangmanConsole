@@ -22,7 +22,7 @@ void pick_word()
     //pick a random word
     int random_numeber = rand() % 100; //from 0 to 99
     picked_word = words[random_numeber];
-    cout<<picked_word;
+    //cout<<picked_word;
     //cout<<picked_word.length();
 }
 
@@ -363,7 +363,7 @@ int main()
         start = chrono::system_clock::now(); //M2
         while(count_mistakes!=6)
         {
-            cout<<endl<<picked_word;
+            //cout<<endl<<picked_word;
             //print wrong letters - elemenets in vector 'wrong_letters'
             for (size_t i = 0; i < wrong_letters.size(); ++i)
             {
@@ -418,7 +418,7 @@ int main()
                     cout<<word_letters[i]<<" ";
                 }
                 */
-                cout<<endl<<"\x1B[32mYou won!\033[0m";
+                cout<<"\x1B[32mYou won!\033[0m";
                 cout<<endl<<"The word was "<<picked_word;
                 cout<<endl<<"You lost "<<count_mistakes<<" lives!"<<endl;
                 hangman(count_mistakes);
