@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <chrono> //measure time M1-M5
 #include <algorithm> //count()
+#include <SFML/Audio.hpp>
 using namespace std;
 
 string picked_word;
@@ -244,6 +245,16 @@ int main()
 {
     srand(time(NULL));
 
+    sf::Music music;
+    if(!music.openFromFile("hangman background.wav"))
+    {
+        cout<<"Loading music ERROR, the program will be resumed shortly...";
+        sleep(1.5);
+    }
+    music.setVolume(20.f);
+    music.setLoop(true);
+    music.play();
+
     //working on the file
     fstream plik;
     plik.open("words_to_hangman.txt", ios::in);
@@ -376,7 +387,7 @@ int main()
             }
 
             your_pick = enter_your_pick(helping_hand, your_pick, wrong_letters);
-            cout<<endl<<your_pick<<endl; sleep(2);
+            //cout<<endl<<your_pick<<endl; sleep(2);
 
             //check if this is one of the word's letters
             bool good = false;
@@ -438,11 +449,10 @@ int main()
     }
     while(looping == 'y');
 
-
+    music.setVolume(12.f); sleep(1); music.setVolume(5.f); sleep(1); music.setVolume(1.f); sleep(0.5);
+    music.stop();
     return 0;
 }
-
-// TODO (sebastian#1#): Muzyka ...
 
 //NOTES
 // system("clear") wasnt working properly -> cout << "\033[2J\033[1;1H";
